@@ -17,6 +17,7 @@ CORS(app)
 @app.route("/api/v1/data/<ticker>", methods=["GET"])
 def getInsights(ticker, freq="20d"):
     i = yfinance.download(tickers=ticker.upper(), period=freq, interval="1d")
+    # TODO: Improve this.. its not fast enuf
     i['delta'] = i['Close']-i['Close'].shift(1)
     i['R'] = i['High']-i['Low']
     i['pctChange'] = i['Close'].pct_change(1)
@@ -36,10 +37,10 @@ def getInsights(ticker, freq="20d"):
     out["strength"] = round(currStrength, 2)
     out['x'] = sorted(o, reverse=True, key=lambda x: x.get('sigma'))
     out["ticker"] = ticker
-    out['min'] = pMin
-    out['max'] = pMax
-    out["mu"] = mu
-    out['price'] = currPrice
+    out['stats'] = {"mean": mu, "median": me}
+    out["price"] = {"current": currPrice, "low": pMin, "high": pMax}
+    out["a"] = "RED" if me < 1 else "GREEN"
+    del(i)
     return jsonify(out)
 
 

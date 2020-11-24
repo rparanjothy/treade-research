@@ -12,4 +12,5 @@
 ## UI
 
 1.  Show all tickers; Upon choosing one, show the 95% and 99% range, show how far is it from the low/high
-    for available capital, how much units to buy to risk 1.75% cap.
+    for available capital, how much units to buy to risk 1.75% cap. (hpc formula)
+2.  Sell Flag, Buy Flag? - if current growth factor is < X% then sell; likewise if x factor is >X % then buy buy low sell high, gradient is changing direction, up to down, sell, down to up buy

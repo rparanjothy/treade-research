@@ -38,6 +38,7 @@ def getInsights(ticker, freq="20d"):
     out["ticker"] = ticker
     out['min'] = pMin
     out['max'] = pMax
+    out["mu"] = mu
     out['price'] = currPrice
     return jsonify(out)
 

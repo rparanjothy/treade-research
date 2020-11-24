@@ -13,6 +13,11 @@ app = Flask(__name__)
 CORS(app)
 
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"msg": "PraiseGod"})
+
+
 @app.route("/api/v1/data/<ticker>/<freq>", methods=["GET"])
 @app.route("/api/v1/data/<ticker>", methods=["GET"])
 def getInsights(ticker, freq="20d"):

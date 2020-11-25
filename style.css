@@ -24,6 +24,15 @@ button:hover {
 button:nth-child(1) {
   margin-top: 10px;
 }
+#x-btn {
+  background-color: rgba(250, 4, 41, 0.68);
+  height: 5px;
+  width: 5px;
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  border-radius: 50%;
+}
 
 #list {
   display: flex;
@@ -47,7 +56,7 @@ button:nth-child(1) {
 
 #closebtn {
   position: fixed;
-  top: 0px;
+  bottom: 0px;
   right: 10px;
   height: 20px;
   width: 20px;
@@ -64,6 +73,10 @@ button:nth-child(1) {
   font-family: "Ubuntu", sans-serif;
 }
 
+#closebtn:hover {
+  background-color: rgba(220, 42, 42, 0.716);
+}
+
 #line:nth-child(1) {
   margin-top: 10px;
 }
@@ -73,7 +86,7 @@ button:nth-child(1) {
   display: flex;
   width: 90%;
   height: 90vh;
-  margin: 10px auto;
+  margin: 40px auto;
   justify-content: flex-start;
   align-content: center;
   padding: 20px;
@@ -82,10 +95,11 @@ button:nth-child(1) {
 #details-box {
   margin: 10px 20px;
   background-color: rgba(52, 210, 194, 0.701);
-  height: 300px;
+  height: 275px;
   border-radius: 4px;
   border: 2px solid rgba(52, 210, 194, 0.701);
   box-shadow: 1px 3px 4px rgba(52, 210, 194, 0.701);
+  position: relative;
 }
 
 #details {
@@ -98,4 +112,15 @@ button:nth-child(1) {
   overflow: auto;
   justify-content: flex-start;
   align-content: flex-start;
+}
+
+#sym-input {
+  position: absolute;
+  top: 0px;
+  right: 40px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 0;
+  outline: 0;
+  margin: 10px;
 }

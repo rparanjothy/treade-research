@@ -3,6 +3,16 @@
   closebtn.id = "closebtn";
   closebtn.innerHTML = "X";
 
+  tt = document.createElement("input");
+  tt.id = "sym-input";
+  tt.type = "text";
+  tt.placeholder = "Enter Symbol";
+  tt.addEventListener("change", (e) => {
+    fetchMe(e.target.value);
+    e.target.value = "";
+  });
+  document.body.appendChild(tt);
+
   closebtn.addEventListener("click", () => {
     document.getElementById("details").innerHTML = "";
   });
@@ -28,6 +38,15 @@
         // document.getElementById("details").innerHTML = "";
         l = document.createElement("div");
         l.id = "details-box";
+
+        xbt = document.createElement("button");
+        xbt.id = "x-btn";
+        xbt.addEventListener("click", (d) => {
+          // console.log(d.target);
+          d.target.parentNode.parentNode.removeChild(d.target.parentNode);
+        });
+        // xbt.value = "x";
+        l.appendChild(xbt);
         xd = [
           `Name : ${x.a_ticker}`,
           `Median Growth : ${x.a_x.median}`,

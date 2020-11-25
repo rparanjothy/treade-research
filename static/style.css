@@ -19,6 +19,10 @@ button {
   background-color: rgba(31, 217, 230, 0.564);
   cursor: pointer;
   font-family: "Ubuntu", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 button:hover {

@@ -77,7 +77,7 @@
     : (x1) => {
         // console.log(`Fetching - ${x1}`);
         axios
-          .get(`http://localhost:5000/api/v1/data/${x1}`, { timeout: 5000 })
+          .get(`/api/v1/data/${x1}`, { timeout: 5000 })
           .then((x) => x.data)
           .then((e) => {
             printMe(e);
@@ -93,7 +93,7 @@
   ccc.appendChild(data);
 
   axios
-    .get("http://localhost:5000/api/v1/list")
+    .get("api/v1/list")
     .then((e) => e.data.data)
     .then((x) => {
       x.forEach(addMe);

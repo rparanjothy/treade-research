@@ -47,7 +47,7 @@ button:nth-child(1) {
   flex-direction: column;
   background-color: rgba(11, 12, 11, 0.413);
   justify-items: center;
-  width: 150px;
+  width: 250px;
   border-radius: 4px;
   align-items: center;
   height: 90%;
@@ -131,4 +131,13 @@ button:nth-child(1) {
   border: 0;
   outline: 0;
   margin: 10px;
+}
+
+#hpc iframe {
+  background-color: rgba(255, 255, 255, 0.97);
+  height: 80vh !important;
+  width: 500px !important;
+  margin-right: 20px;
+  border-radius: 5px;
+  overflow-x: hidden;
 }

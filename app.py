@@ -3,9 +3,6 @@
 import pandas as pd
 import pandas_datareader as r
 from datetime import datetime, timedelta
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from functools import reduce
 import yfinance
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS

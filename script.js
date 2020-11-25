@@ -48,14 +48,14 @@
         // xbt.value = "x";
         l.appendChild(xbt);
         xd = [
-          `Name : ${x.a_ticker}`,
+          `Name : ${x.a_ticker} ( ${x.a_curr_dirn} )`,
           `Median Growth : ${x.a_x.median}`,
-          `Current Direction : ${x.a_curr_dirn}`,
+          // `Current Direction : `,
           `Current Gain : ${parseFloat((x.a_x.current - 1) * 100).toFixed(2)}%`,
           `Current Price : $ ${x.close.current}`,
+          `Regression Value: $ ${x.a_predict.value}`,
           `Prediction High: $ ${x.a_predict.high}`,
           `Prediction Low: $ ${x.a_predict.low}`,
-          `Regression Value: $ ${x.a_predict.value}`,
           `Strength: ${x.a_strength}`,
           `Growth (2 Sigma): ${
             x.a_x.ci.filter((e) => e.sigma === 2)[0].low

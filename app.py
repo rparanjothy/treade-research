@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from functools import reduce
 import yfinance
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 import numpy as np
 
@@ -19,6 +19,11 @@ CORS(app)
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({"msg": "PraiseGod"})
+
+
+@app.route("/app", methods=["GET"])
+def main():
+    return render_template("index.html")
 
 
 def predictCloseRange(i, d, s):

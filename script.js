@@ -1,4 +1,14 @@
 !(() => {
+  closebtn = document.createElement("div");
+  closebtn.id = "closebtn";
+  closebtn.innerHTML = "X";
+
+  closebtn.addEventListener("click", () => {
+    document.getElementById("details").innerHTML = "";
+  });
+
+  document.body.appendChild(closebtn);
+
   window.addMe = window.addMe
     ? null
     : (x) => {
@@ -19,7 +29,7 @@
         l = document.createElement("div");
         l.id = "details-box";
         xd = [
-          `Name : ${x.a_ticker} [${x.a}]`,
+          `Name : ${x.a_ticker}`,
           `Median Growth : ${x.a_x.median}`,
           `Current Direction : ${x.a_curr_dirn}`,
           `Current Gain : ${parseFloat((x.a_x.current - 1) * 100).toFixed(2)}%`,
@@ -69,5 +79,5 @@
     .then((x) => {
       x.forEach(addMe);
     })
-    .then(console.error);
+    .catch((e) => console.error(e));
 })();

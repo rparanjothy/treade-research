@@ -45,6 +45,25 @@ button:nth-child(1) {
   border-bottom: 1px solid rgba(52, 210, 194, 0.401);
 }
 
+#closebtn {
+  position: fixed;
+  top: 0px;
+  right: 10px;
+  height: 20px;
+  width: 20px;
+  background-color: rgba(165, 42, 42, 0.516);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  cursor: pointer;
+  margin: 10px;
+  font-family: "Ubuntu", sans-serif;
+}
+
 #line:nth-child(1) {
   margin-top: 10px;
 }

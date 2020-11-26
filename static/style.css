@@ -61,7 +61,7 @@ button:nth-child(1) {
 
 #line {
   padding: 5px;
-  width: 200px;
+  width: 220px;
   margin: 0 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.101);
   display: flex;

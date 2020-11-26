@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap");
 body {
-  background-color: rgba(0, 0, 0, 0.721);
+  background-color: rgba(0, 0, 0, 0.899);
   font-size: small;
 }
 
@@ -33,13 +33,14 @@ button:nth-child(1) {
   margin-top: 10px;
 }
 #x-btn {
-  background-color: rgba(250, 4, 41, 0.8);
+  background-color: rgba(228, 133, 18, 0.8);
   height: 5px;
   width: 5px;
   position: absolute;
   top: -20px;
   right: -10px;
   border-radius: 50%;
+  transform: scale(0.7);
 }
 
 #list {
@@ -52,14 +53,25 @@ button:nth-child(1) {
   align-items: center;
   height: 90%;
   overflow: auto;
-  scroll-padding: 5px;
+}
+
+#list::-webkit-scrollbar {
+  display: none;
 }
 
 #line {
   padding: 5px;
   width: 200px;
-  margin-left: 20px;
-  border-bottom: 1px solid rgba(52, 210, 194, 0.401);
+  margin: 0 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.101);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#line:hover {
+  transform: scale(1.02);
+  background-color: rgba(0, 0, 0, 0.134);
 }
 
 #closebtn {
@@ -94,7 +106,7 @@ button:nth-child(1) {
   display: flex;
   width: 90%;
   height: 90vh;
-  margin: 40px auto;
+  margin: 30px auto;
   justify-content: flex-start;
   align-content: center;
   padding: 20px;
@@ -102,11 +114,8 @@ button:nth-child(1) {
 
 #details-box {
   margin: 10px 20px;
-  background-color: rgba(52, 210, 194, 0.701);
-  height: 250px;
+  /* height: 350px; */
   border-radius: 4px;
-  border: 2px solid rgba(52, 210, 194, 0.701);
-  box-shadow: 1px 3px 4px rgba(52, 210, 194, 0.701);
   position: relative;
 }
 
@@ -114,7 +123,6 @@ button:nth-child(1) {
   display: flex;
   flex-direction: row;
   width: 80%;
-  /* background-color: pink; */
   margin-left: 10px;
   flex-wrap: wrap;
   overflow: auto;
@@ -124,7 +132,7 @@ button:nth-child(1) {
 
 #sym-input {
   position: absolute;
-  top: 0px;
+  top: 10px;
   right: 40px;
   padding: 10px;
   border-radius: 4px;

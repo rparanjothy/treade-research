@@ -192,6 +192,7 @@ def getInsights(ticker, freq="20d"):
     i['growthX'] = (i['Close']/i['Close'].shift(1))
     #  for fit
     i["idx"] = (i.index.shift(1, freq="D")-i.index[0]).days
+    i["range"] = i['High']-i['Low']
 
     # Strength Computation
     pMin, pMax = tuple(
@@ -210,6 +211,8 @@ def getInsights(ticker, freq="20d"):
     # lowStats = getStats(i, "Low")
     closeStats = getStats(i, "Close")
     growthStats = getStats(i, "growthX")
+    rangeStats = getStats(i, "range")
+
     prediction = predictCloseRange(i, 1, closeStats)
 
     del(i)
@@ -219,6 +222,7 @@ def getInsights(ticker, freq="20d"):
     out["a_strength"] = round(currStrength, 2)
     out["a_ticker"] = ticker
     out["a_predict"] = prediction
+    out["a_range"] = rangeStats
     out['close'] = closeStats
     out['a_x'] = growthStats
     out["a"] = "RED" if growthStats["median"] < .99 else "GREEN"

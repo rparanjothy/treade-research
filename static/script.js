@@ -48,28 +48,45 @@
         // xbt.value = "x";
         l.appendChild(xbt);
         xd = [
-          `Name : ${x.a_ticker} ( ${x.a_curr_dirn} )`,
+          `Name : ${x.a_ticker} (${x.a_freq})`,
+          `Strength: ${x.a_strength}`,
           `Median Growth : ${x.a_x.median}`,
+          `Median Range* : $ ${x.a_range.median}`,
           // `Current Direction : `,
           `Current Gain : ${parseFloat((x.a_x.current - 1) * 100).toFixed(2)}%`,
           `Current Price : $ ${x.close.current}`,
-          `Regression Value: $ ${x.a_predict.value}`,
+          `Regression Value (1D): $ ${x.a_predict.value}`,
           `Prediction High: $ ${x.a_predict.high}`,
           `Prediction Low: $ ${x.a_predict.low}`,
-          `Strength: ${x.a_strength}`,
           `Growth (2 Sigma): ${
             x.a_x.ci.filter((e) => e.sigma === 2)[0].low
           } - ${x.a_x.ci.filter((e) => e.sigma === 2)[0].high}`,
-          `Freq:  ${x.a_freq}`,
+          `Range (2 Sigma): $ ${
+            x.a_range.ci.filter((e) => e.sigma === 2)[0].low
+          } - $ ${x.a_range.ci.filter((e) => e.sigma === 2)[0].high}`,
         ];
+        l.style.background =
+          x.a_curr_dirn === "DOWN" ? "#ff000091" : "#00ff0081";
         xd.forEach((lx) => {
-          line = document.createElement("div");
-          line.id = "line";
-          line.innerText = lx;
-          l.appendChild(line);
+          l.appendChild(splitMe(lx));
         });
-        // console.log(xd.join("\n"));
         document.getElementById("details").appendChild(l);
+      };
+
+  window.splitMe = window.splitMe
+    ? null
+    : (x) => {
+        d = x.split(":");
+        w = document.createElement("div");
+        w.id = "line";
+        k = document.createElement("div");
+        v = document.createElement("div");
+        v.id = "line-value";
+        k.innerText = d[0];
+        v.innerText = d[1];
+        w.appendChild(k);
+        w.appendChild(v);
+        return w;
       };
 
   window.fetchMe = window.fetchMe

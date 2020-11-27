@@ -86,7 +86,7 @@
         capTxt = document.createElement("input");
         capTxt.type = "number";
         capTxt.id = "capTxt";
-        capTxt.step = "0.1";
+        capTxt.step = "10";
 
         capTxt.addEventListener("change", (e) => {
           const cap = e.target.value;
@@ -104,7 +104,7 @@
               ppod = createDiv("preview-pod");
               ppod.appendChild(xbt);
 
-              const q = createDiv("pre-qty", d.qty);
+              const q = createDiv("pre-qty", d.qty > 0 ? d.qty : -99.99999);
               const c = createDiv("pre-cap", d.cap);
               const e = createDiv("pre-eq", d.eq);
               const l = createDiv("pre-lo", d.lo);
@@ -124,7 +124,7 @@
               newPriceTxt = document.createElement("input");
               newPriceTxt.type = "number";
               newPriceTxt.id = "newPrice";
-              newPriceTxt.step = "0.1";
+              newPriceTxt.step = "0.01";
               newPriceTxt.value = x.close.current;
               newPriceTxt.addEventListener("change", (e) => {
                 gx = parseFloat(e.target.value) * d.qty - d.eq;

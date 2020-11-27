@@ -43,6 +43,21 @@ button:nth-child(1) {
   transform: scale(0.7);
 }
 
+#preview {
+  position: relative;
+}
+
+#x-btn-prvw {
+  background-color: rgba(228, 18, 32, 0.8);
+  height: 5px;
+  width: 5px;
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  border-radius: 50%;
+  transform: scale(0.7);
+}
+
 #list {
   display: flex;
   flex-direction: column;
@@ -57,6 +72,34 @@ button:nth-child(1) {
 
 #list::-webkit-scrollbar {
   display: none;
+}
+#preview-pod {
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.199);
+  width: 95%;
+  margin: 10px auto;
+  position: relative;
+}
+
+#capTxt {
+  position: relative;
+  left: 10px;
+  padding: 10px;
+  margin-left: 80px;
+  border-radius: 4px;
+  border: 0;
+  outline: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#newPrice {
+  height: 35px;
+  border-radius: 4px;
+  border: 0;
+  outline: 0;
+  text-align: right;
 }
 
 #line {
@@ -78,6 +121,25 @@ button:nth-child(1) {
   position: fixed;
   bottom: 0px;
   right: 10px;
+  height: 20px;
+  width: 20px;
+  background-color: rgba(165, 42, 42, 0.516);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  cursor: pointer;
+  margin: 10px;
+  font-family: "Ubuntu", sans-serif;
+}
+
+#cclosebtn {
+  position: fixed;
+  bottom: 0px;
+  left: 10px;
   height: 20px;
   width: 20px;
   background-color: rgba(165, 42, 42, 0.516);
@@ -117,6 +179,10 @@ button:nth-child(1) {
   /* height: 350px; */
   border-radius: 4px;
   position: relative;
+}
+
+.hide {
+  display: none;
 }
 
 #details {

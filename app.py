@@ -230,5 +230,19 @@ def getInsights(ticker, freq="20d"):
     return jsonify(out)
 
 
+@app.route("/api/v1/opti/<p>/<cap>", methods=['GET'])
+def opti(p, cap):
+    px, capx = tuple(map(float, (p, cap)))
+    tolerance = .0175
+    lps = .04
+    lps_amt = lps*px
+    stoploss = round(px*(1-lps), 2)
+    risk = float(capx)*tolerance
+    qty = int(risk/(float(px)*lps))
+    eq = qty*px
+    lo = capx-eq
+    return jsonify({"eq": eq, "lo": lo, "risk": risk, "lps": lps_amt, "riskpct": tolerance, 'qty': qty, "stoploss": stoploss, "price": px, "cap": capx})
+
+
 if __name__ == "__main__":
     app.run("0.0.0.0", 5000, True)

@@ -1,7 +1,12 @@
 !(() => {
+  document.title = " Ram's Planner";
   closebtn = document.createElement("div");
   closebtn.id = "closebtn";
   closebtn.innerHTML = "X";
+
+  cclosebtn = document.createElement("div");
+  cclosebtn.id = "cclosebtn";
+  cclosebtn.innerHTML = "Y";
 
   tt = document.createElement("input");
   tt.id = "sym-input";
@@ -17,16 +22,19 @@
     document.getElementById("details").innerHTML = "";
   });
 
+  cclosebtn.addEventListener("click", () => {
+    document.getElementById("hpc").classList.toggle("hide");
+  });
+
   document.body.appendChild(closebtn);
+  document.body.appendChild(cclosebtn);
 
   window.addMe = window.addMe
     ? null
     : (x) => {
-        // console.log(`Added - ${x}`);
         const li = document.createElement("button");
         li.id = x;
         li.innerText = x;
-        // li.onclick = fetchMe(x);
         li.addEventListener("click", () => fetchMe(x));
         ul.appendChild(li);
       };
@@ -34,19 +42,17 @@
   window.printMe = window.printMe
     ? null
     : (x) => {
-        // console.log(x);
-        // document.getElementById("details").innerHTML = "";
         l = document.createElement("div");
         l.id = "details-box";
 
         xbt = document.createElement("button");
         xbt.id = "x-btn";
         xbt.addEventListener("click", (d) => {
-          // console.log(d.target);
           d.target.parentNode.parentNode.removeChild(d.target.parentNode);
         });
-        // xbt.value = "x";
+
         l.appendChild(xbt);
+
         xd = [
           `Name : ${x.a_ticker} (${x.a_freq})`,
           `Strength: ${x.a_strength}`,
@@ -65,12 +71,119 @@
             x.a_range.ci.filter((e) => e.sigma === 2)[0].low
           } - $ ${x.a_range.ci.filter((e) => e.sigma === 2)[0].high}`,
         ];
+
         l.style.background =
           x.a_curr_dirn === "DOWN" ? "#ff000091" : "#00ff0081";
+
         xd.forEach((lx) => {
           l.appendChild(splitMe(lx));
         });
+
         document.getElementById("details").appendChild(l);
+
+        // worksheet
+        prvw = createDiv("preview");
+        capTxt = document.createElement("input");
+        capTxt.type = "number";
+        capTxt.id = "capTxt";
+        capTxt.step = "0.1";
+
+        capTxt.addEventListener("change", (e) => {
+          const cap = e.target.value;
+          e.target.value = "";
+          axios
+            .get(`/api/v1/opti/${x.close.current}/${cap}`)
+            .then((x) => x.data)
+            .then((d) => {
+              xbt = document.createElement("button");
+              xbt.id = "x-btn-prvw";
+              xbt.addEventListener("click", (d) => {
+                d.target.parentNode.parentNode.removeChild(d.target.parentNode);
+              });
+
+              ppod = createDiv("preview-pod");
+              ppod.appendChild(xbt);
+
+              const q = createDiv("pre-qty", d.qty);
+              const c = createDiv("pre-cap", d.cap);
+              const e = createDiv("pre-eq", d.eq);
+              const l = createDiv("pre-lo", d.lo);
+              const r = createDiv("pre-risk", d.risk);
+              const s = createDiv("pre-stoploss", d.stoploss);
+              const lps = createDiv("pre-lps", d.lps);
+              const cp = createDiv("pre-cp", x.close.current);
+
+              const qRow = createKV("line", "Quantity", q);
+              const cRow = createKV("line", "Cap", c);
+              const eRow = createKV("line", "Equity", e);
+              const lRow = createKV("line", "Leftover", l);
+              const rRow = createKV("line", "Risk", r);
+              const cpRow = createKV("line", "Price", cp);
+              const sRow = createKV("line", "StopLoss", s);
+              const lpsRow = createKV("line", "LPS", lps);
+              newPriceTxt = document.createElement("input");
+              newPriceTxt.type = "number";
+              newPriceTxt.id = "newPrice";
+              newPriceTxt.step = "0.1";
+              newPriceTxt.value = x.close.current;
+              newPriceTxt.addEventListener("change", (e) => {
+                gx = parseFloat(e.target.value) * d.qty - d.eq;
+                const g = createDiv("pre-gain", gx);
+                const gainRow = createKV(
+                  "line",
+                  `Gain @ $ ${e.target.value} : ${parseFloat(
+                    (gx / d.cap) * 100
+                  ).toFixed(2)}%`,
+                  g
+                );
+                ppod.appendChild(gainRow);
+              });
+              const expPrice = createKV("line", "NewPrice", newPriceTxt);
+
+              [
+                qRow,
+                cRow,
+                eRow,
+                lRow,
+                rRow,
+                cpRow,
+                sRow,
+                lpsRow,
+                expPrice,
+              ].forEach((x) => ppod.appendChild(x));
+              prvw.appendChild(ppod);
+            })
+            .catch(console.error);
+        });
+
+        [capTxt].forEach((x) => prvw.appendChild(x));
+
+        l.appendChild(prvw);
+      };
+
+  window.createDiv = window.createDiv
+    ? null
+    : (id, v) => {
+        const x = document.createElement("div");
+        x.id = id;
+        v
+          ? (x.innerText =
+              id === "pre-qty" ? parseInt(v) : `$ ${parseFloat(v).toFixed(2)}`)
+          : null;
+        return x;
+      };
+
+  window.createKV = window.createKV
+    ? null
+    : (id, k, v) => {
+        const row = createDiv(id);
+        const kx = document.createElement("div");
+        kx.id = k;
+        kx.class = "row-key";
+        kx.innerText = k;
+        v.class = "row-value";
+        [kx, v].forEach((x) => row.appendChild(x));
+        return row;
       };
 
   window.splitMe = window.splitMe
@@ -92,7 +205,6 @@
   window.fetchMe = window.fetchMe
     ? null
     : (x1) => {
-        // console.log(`Fetching - ${x1}`);
         axios
           .get(`/api/v1/data/${x1}`, { timeout: 5000 })
           .then((x) => x.data)

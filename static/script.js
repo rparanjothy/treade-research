@@ -1,5 +1,5 @@
 !(() => {
-  document.title = " Ram's Planner";
+  document.title = "PinkPanther";
   closebtn = document.createElement("div");
   closebtn.id = "closebtn";
   closebtn.innerHTML = "X";

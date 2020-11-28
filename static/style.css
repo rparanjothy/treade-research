@@ -73,13 +73,15 @@ button:nth-child(1) {
 #list::-webkit-scrollbar {
   display: none;
 }
-#preview-pod {
+
+.preview-pod {
   border-radius: 4px;
   box-sizing: border-box;
   background-color: rgba(255, 255, 255, 0.199);
   width: 95%;
   margin: 10px auto;
   position: relative;
+  box-shadow: 0px 0px 3px 1px #ffffff80;
 }
 
 #capTxt {
@@ -91,7 +93,7 @@ button:nth-child(1) {
   border: 0;
   outline: 0;
   margin-top: 10px;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
 #newPrice {
@@ -174,7 +176,7 @@ button:nth-child(1) {
   padding: 20px;
 }
 
-#details-box {
+.details-box {
   margin: 10px 20px;
   /* height: 350px; */
   border-radius: 4px;
@@ -198,6 +200,18 @@ button:nth-child(1) {
 
 #sym-input {
   position: absolute;
+  top: 70px;
+  right: 40px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 0;
+  outline: 0;
+  margin: 10px;
+  width: 100px;
+}
+
+#cap-input {
+  position: absolute;
   top: 10px;
   right: 40px;
   padding: 10px;
@@ -205,6 +219,16 @@ button:nth-child(1) {
   border: 0;
   outline: 0;
   margin: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(147, 124, 228) !important;
+  text-align: right;
+  width: 150px;
+  background-color: rgba(67, 67, 67, 0.339);
+}
+
+#cap-input:focus {
+  background-color: transparent;
 }
 
 #hpc iframe {

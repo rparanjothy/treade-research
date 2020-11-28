@@ -18,6 +18,20 @@
   });
   document.body.appendChild(tt);
 
+  ccx = document.createElement("input");
+  ccx.id = "cap-input";
+  ccx.type = "number";
+  ccx.step = 10;
+  ccx.placeholder = "Enter Cap";
+
+  ccx.addEventListener("change", (e) => {
+    window.maxCap = parseFloat(e.target.value).toFixed(2);
+    window.cguy ? fetchMe(window.cguy) : null;
+    window.cguy = null;
+  });
+
+  document.body.appendChild(ccx);
+
   closebtn.addEventListener("click", () => {
     document.getElementById("details").innerHTML = "";
   });
@@ -29,13 +43,91 @@
   document.body.appendChild(closebtn);
   document.body.appendChild(cclosebtn);
 
+  window.computeMe = window.computeMe
+    ? null
+    : (x, cap) => {
+        axios
+          .get(`/api/v1/opti/${x.close.current}/${cap}`)
+          .then((x) => x.data)
+          .then((d) => {
+            xbt = document.createElement("button");
+            xbt.id = "x-btn-prvw";
+            xbt.addEventListener("click", (d) => {
+              d.target.parentNode.parentNode.removeChild(d.target.parentNode);
+            });
+
+            ppod = createDiv(`preview-pod-${x.a_ticker}`);
+            ppod.classList.add("preview-pod");
+            ppod.appendChild(xbt);
+
+            const q = createDiv("pre-qty", d.qty > 0 ? d.qty : -99.99999);
+            const c = createDiv("pre-cap", d.cap);
+            const e = createDiv("pre-eq", d.eq);
+            const l = createDiv("pre-lo", d.lo);
+            const r = createDiv("pre-risk", d.risk);
+            const s = createDiv("pre-stoploss", d.stoploss);
+            const lps = createDiv("pre-lps", d.lps);
+            const cp = createDiv("pre-cp", x.close.current);
+
+            const qRow = createKV("line", "Quantity", q);
+            const cRow = createKV("line", "Cap", c);
+            const eRow = createKV("line", "Equity", e);
+            const lRow = createKV("line", "Leftover", l);
+            const rRow = createKV("line", "Risk", r);
+            const cpRow = createKV("line", "Price", cp);
+            const sRow = createKV("line", "StopLoss", s);
+            const lpsRow = createKV("line", "LPS", lps);
+
+            newPriceTxt = document.createElement("input");
+            newPriceTxt.type = "number";
+            newPriceTxt.id = "newPrice";
+            newPriceTxt.step = "0.01";
+            newPriceTxt.value = x.close.current;
+            newPriceTxt.addEventListener("change", (e) => {
+              gx = parseFloat(e.target.value) * d.qty - d.eq;
+              const g = createDiv("pre-gain", gx);
+              const gainRow = createKV(
+                "line",
+                `Gain @ $${e.target.value} : ${parseFloat(
+                  (gx / d.cap) * 100
+                ).toFixed(2)}%`,
+                g
+              );
+              ppod.appendChild(gainRow);
+            });
+            const expPrice = createKV("line", "New Price", newPriceTxt);
+
+            [
+              qRow,
+              cRow,
+              eRow,
+              lRow,
+              rRow,
+              sRow,
+              lpsRow,
+              cpRow,
+              expPrice,
+            ].forEach((x) => ppod.appendChild(x));
+
+            document
+              .getElementById(`details-box-${x.a_ticker}`)
+              .appendChild(ppod);
+          })
+          .catch(console.error);
+      };
+
   window.addMe = window.addMe
     ? null
     : (x) => {
         const li = document.createElement("button");
         li.id = x;
         li.innerText = x;
-        li.addEventListener("click", () => fetchMe(x));
+        li.addEventListener("click", () => {
+          window.cguy = x;
+          window.maxCap
+            ? fetchMe(x)
+            : document.getElementById("cap-input").focus();
+        });
         ul.appendChild(li);
       };
 
@@ -43,7 +135,9 @@
     ? null
     : (x) => {
         l = document.createElement("div");
-        l.id = "details-box";
+        l.id = `details-box-${x.a_ticker}`;
+        l.classList.add("details-box");
+        // l.id = `details-box`;
 
         xbt = document.createElement("button");
         xbt.id = "x-btn";
@@ -57,19 +151,20 @@
           `Name : ${x.a_ticker} (${x.a_freq})`,
           `Strength: ${x.a_strength}`,
           `Median Growth : ${x.a_x.median}`,
-          `Median Range* : $ ${x.a_range.median}`,
-          // `Current Direction : `,
-          `Current Gain : ${parseFloat((x.a_x.current - 1) * 100).toFixed(2)}%`,
-          `Current Price : $ ${x.close.current}`,
-          `Regression Value (1D): $ ${x.a_predict.value}`,
-          `Prediction High: $ ${x.a_predict.high}`,
-          `Prediction Low: $ ${x.a_predict.low}`,
           `Growth (2 Sigma): ${
             x.a_x.ci.filter((e) => e.sigma === 2)[0].low
           } - ${x.a_x.ci.filter((e) => e.sigma === 2)[0].high}`,
-          `Range (2 Sigma): $ ${
+          `Median Range* : $${x.a_range.median} [${parseFloat(
+            (x.a_range.median / x.close.current) * 100
+          ).toFixed(2)}%]`,
+          `Range (2 Sigma): $${
             x.a_range.ci.filter((e) => e.sigma === 2)[0].low
-          } - $ ${x.a_range.ci.filter((e) => e.sigma === 2)[0].high}`,
+          } - $${x.a_range.ci.filter((e) => e.sigma === 2)[0].high}`,
+          `Current Gain : ${parseFloat((x.a_x.current - 1) * 100).toFixed(2)}%`,
+          `Current Price : $${x.close.current}`,
+          `Regression Value (1D): $${x.a_predict.value}`,
+          `Prediction High: $${x.a_predict.high}`,
+          `Prediction Low: $${x.a_predict.low}`,
         ];
 
         l.style.background =
@@ -82,83 +177,22 @@
         document.getElementById("details").appendChild(l);
 
         // worksheet
-        prvw = createDiv("preview");
+        // prvw = createDiv("preview");
         capTxt = document.createElement("input");
         capTxt.type = "number";
         capTxt.id = "capTxt";
         capTxt.step = "10";
+        capTxt.value = window.maxCap;
 
         capTxt.addEventListener("change", (e) => {
-          const cap = e.target.value;
-          e.target.value = "";
-          axios
-            .get(`/api/v1/opti/${x.close.current}/${cap}`)
-            .then((x) => x.data)
-            .then((d) => {
-              xbt = document.createElement("button");
-              xbt.id = "x-btn-prvw";
-              xbt.addEventListener("click", (d) => {
-                d.target.parentNode.parentNode.removeChild(d.target.parentNode);
-              });
-
-              ppod = createDiv("preview-pod");
-              ppod.appendChild(xbt);
-
-              const q = createDiv("pre-qty", d.qty > 0 ? d.qty : -99.99999);
-              const c = createDiv("pre-cap", d.cap);
-              const e = createDiv("pre-eq", d.eq);
-              const l = createDiv("pre-lo", d.lo);
-              const r = createDiv("pre-risk", d.risk);
-              const s = createDiv("pre-stoploss", d.stoploss);
-              const lps = createDiv("pre-lps", d.lps);
-              const cp = createDiv("pre-cp", x.close.current);
-
-              const qRow = createKV("line", "Quantity", q);
-              const cRow = createKV("line", "Cap", c);
-              const eRow = createKV("line", "Equity", e);
-              const lRow = createKV("line", "Leftover", l);
-              const rRow = createKV("line", "Risk", r);
-              const cpRow = createKV("line", "Price", cp);
-              const sRow = createKV("line", "StopLoss", s);
-              const lpsRow = createKV("line", "LPS", lps);
-              newPriceTxt = document.createElement("input");
-              newPriceTxt.type = "number";
-              newPriceTxt.id = "newPrice";
-              newPriceTxt.step = "0.01";
-              newPriceTxt.value = x.close.current;
-              newPriceTxt.addEventListener("change", (e) => {
-                gx = parseFloat(e.target.value) * d.qty - d.eq;
-                const g = createDiv("pre-gain", gx);
-                const gainRow = createKV(
-                  "line",
-                  `Gain @ $ ${e.target.value} : ${parseFloat(
-                    (gx / d.cap) * 100
-                  ).toFixed(2)}%`,
-                  g
-                );
-                ppod.appendChild(gainRow);
-              });
-              const expPrice = createKV("line", "NewPrice", newPriceTxt);
-
-              [
-                qRow,
-                cRow,
-                eRow,
-                lRow,
-                rRow,
-                cpRow,
-                sRow,
-                lpsRow,
-                expPrice,
-              ].forEach((x) => ppod.appendChild(x));
-              prvw.appendChild(ppod);
-            })
-            .catch(console.error);
+          // for the local guys cap
+          computeMe(x, e.target.value);
         });
 
-        [capTxt].forEach((x) => prvw.appendChild(x));
+        //  to compute when rendered for the first time
+        computeMe(x, window.maxCap);
 
-        l.appendChild(prvw);
+        l.appendChild(capTxt);
       };
 
   window.createDiv = window.createDiv
@@ -168,7 +202,7 @@
         x.id = id;
         v
           ? (x.innerText =
-              id === "pre-qty" ? parseInt(v) : `$ ${parseFloat(v).toFixed(2)}`)
+              id === "pre-qty" ? parseInt(v) : `$${parseFloat(v).toFixed(2)}`)
           : null;
         return x;
       };
@@ -229,3 +263,75 @@
     })
     .catch((e) => console.error(e));
 })();
+
+// capTxt.addEventListener("change", (e) => {
+//   const cap = e.target.value;
+//   e.target.value = "";
+//   axios
+//     .get(`/api/v1/opti/${x.close.current}/${cap}`)
+//     .then((x) => x.data)
+//     .then((d) => {
+//       xbt = document.createElement("button");
+//       xbt.id = "x-btn-prvw";
+//       xbt.addEventListener("click", (d) => {
+//         d.target.parentNode.parentNode.removeChild(d.target.parentNode);
+//       });
+
+//       ppod = createDiv(`preview-pod-${x.a_ticker}`);
+//       ppod.classList.add("preview-pod");
+//       ppod.appendChild(xbt);
+
+//       const q = createDiv("pre-qty", d.qty > 0 ? d.qty : -99.99999);
+//       const c = createDiv("pre-cap", d.cap);
+//       const e = createDiv("pre-eq", d.eq);
+//       const l = createDiv("pre-lo", d.lo);
+//       const r = createDiv("pre-risk", d.risk);
+//       const s = createDiv("pre-stoploss", d.stoploss);
+//       const lps = createDiv("pre-lps", d.lps);
+//       const cp = createDiv("pre-cp", x.close.current);
+
+//       const qRow = createKV("line", "Quantity", q);
+//       const cRow = createKV("line", "Cap", c);
+//       const eRow = createKV("line", "Equity", e);
+//       const lRow = createKV("line", "Leftover", l);
+//       const rRow = createKV("line", "Risk", r);
+//       const cpRow = createKV("line", "Price", cp);
+//       const sRow = createKV("line", "StopLoss", s);
+//       const lpsRow = createKV("line", "LPS", lps);
+//       newPriceTxt = document.createElement("input");
+//       newPriceTxt.type = "number";
+//       newPriceTxt.id = "newPrice";
+//       newPriceTxt.step = "0.01";
+//       newPriceTxt.value = x.close.current;
+//       newPriceTxt.addEventListener("change", (e) => {
+//         gx = parseFloat(e.target.value) * d.qty - d.eq;
+//         const g = createDiv("pre-gain", gx);
+//         const gainRow = createKV(
+//           "line",
+//           `Gain @ $${e.target.value} : ${parseFloat(
+//             (gx / d.cap) * 100
+//           ).toFixed(2)}%`,
+//           g
+//         );
+//         ppod.appendChild(gainRow);
+//       });
+//       const expPrice = createKV("line", "New Price", newPriceTxt);
+
+//       [
+//         qRow,
+//         cRow,
+//         eRow,
+//         lRow,
+//         rRow,
+//         cpRow,
+//         sRow,
+//         lpsRow,
+//         expPrice,
+//       ].forEach((x) => ppod.appendChild(x));
+
+//       document
+//         .getElementById(`details-box-${x.a_ticker}`)
+//         .appendChild(ppod);
+//     })
+//     .catch(console.error);
+// });

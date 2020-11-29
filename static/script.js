@@ -13,7 +13,7 @@
   tt.type = "text";
   tt.placeholder = "Enter Symbol";
   tt.addEventListener("change", (e) => {
-    fetchMe(e.target.value);
+    fetchMe(e.target.value.toUpperCase());
     e.target.value = "";
   });
   document.body.appendChild(tt);

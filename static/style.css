@@ -231,6 +231,12 @@ button:nth-child(1) {
   background-color: transparent;
 }
 
+.seeMe {
+  background-color: rgb(255 255 255 / 28%);
+  border-radius: 4px;
+  padding: 5px;
+}
+
 #hpc iframe {
   background-color: rgba(255, 255, 255, 0.97);
   height: 80vh !important;

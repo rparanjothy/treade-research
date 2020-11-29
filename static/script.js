@@ -43,6 +43,19 @@
   document.body.appendChild(closebtn);
   document.body.appendChild(cclosebtn);
 
+  window.newPriceOnChange = window.newPriceOnChange
+    ? null
+    : (newPrice, d) => {
+        gx = parseFloat(newPrice) * d.qty - d.eq;
+        const g = createDiv("pre-gain", gx);
+        const gainRow = createKV(
+          "line",
+          `Gain @ $${newPrice} : ${parseFloat((gx / d.cap) * 100).toFixed(2)}%`,
+          g
+        );
+        ppod.appendChild(gainRow);
+      };
+
   window.computeMe = window.computeMe
     ? null
     : (x, cap) => {
@@ -82,19 +95,17 @@
             newPriceTxt.type = "number";
             newPriceTxt.id = "newPrice";
             newPriceTxt.step = "0.01";
-            newPriceTxt.value = x.close.current;
+            // newPriceTxt.value = x.close.current;
+            newPriceTxt.value = parseFloat(
+              x.close.current + x.a_range.median
+            ).toFixed(2);
+
             newPriceTxt.addEventListener("change", (e) => {
-              gx = parseFloat(e.target.value) * d.qty - d.eq;
-              const g = createDiv("pre-gain", gx);
-              const gainRow = createKV(
-                "line",
-                `Gain @ $${e.target.value} : ${parseFloat(
-                  (gx / d.cap) * 100
-                ).toFixed(2)}%`,
-                g
-              );
-              ppod.appendChild(gainRow);
+              newPriceOnChange(e.target.value, d);
             });
+
+            newPriceOnChange(newPriceTxt.value, d);
+
             const expPrice = createKV("line", "New Price", newPriceTxt);
 
             [
@@ -231,6 +242,7 @@
         v.id = "line-value";
         k.innerText = d[0];
         v.innerText = d[1];
+        d[0].startsWith("Median") ? v.classList.add("seeMe") : null;
         w.appendChild(k);
         w.appendChild(v);
         return w;

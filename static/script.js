@@ -123,6 +123,21 @@
             document
               .getElementById(`details-box-${x.a_ticker}`)
               .appendChild(ppod);
+
+            outcome = createDiv("outcome");
+            outcome.classList.add("outcome");
+            outcome.innerText =
+              d.risk >= x.close.current + x.a_range.median
+                ? "Low Risk"
+                : "High Risk";
+            outcome.style.background =
+              d.risk >= x.close.current + x.a_range.median
+                ? "#00ff00ab"
+                : "#ff0000ab";
+
+            document
+              .getElementById(`details-box-${x.a_ticker}`)
+              .appendChild(outcome);
           })
           .catch(console.error);
       };
@@ -215,6 +230,7 @@
           ? (x.innerText =
               id === "pre-qty" ? parseInt(v) : `$${parseFloat(v).toFixed(2)}`)
           : null;
+        id.startsWith("pre-risk") ? x.classList.add("seeMe") : null;
         return x;
       };
 

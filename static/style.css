@@ -70,6 +70,15 @@ button:nth-child(1) {
   overflow: auto;
 }
 
+.outcome {
+  background: rgb(243 146 28 / 80%);
+  position: absolute;
+  top: 307px;
+  padding: 8;
+  left: 20px;
+  border-radius: 10px;
+}
+
 #list::-webkit-scrollbar {
   display: none;
 }

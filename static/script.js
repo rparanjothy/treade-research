@@ -42,7 +42,7 @@
 
   document.body.appendChild(closebtn);
   document.body.appendChild(cclosebtn);
-
+  // window.bannerData = [];
   window.newPriceOnChange = window.newPriceOnChange
     ? null
     : (newPrice, d) => {
@@ -53,6 +53,15 @@
           `Gain @ $${newPrice} : ${parseFloat((gx / d.cap) * 100).toFixed(2)}%`,
           g
         );
+        // const cid = `${window.currentItem}:${g.innerText}`;
+        const cid = window.currentItem;
+        const data = {
+          name: cid,
+          gain: g.innerText,
+        };
+        // window.bannerData.push(data);
+        // add to banner here
+        addToBanner(banner, data);
         ppod.appendChild(gainRow);
       };
 
@@ -123,10 +132,6 @@
             document
               .getElementById(`details-box-${x.a_ticker}`)
               .appendChild(ppod);
-
-            document
-              .getElementById(`details-box-${x.a_ticker}`)
-              .appendChild(outcome);
           })
           .catch(console.error);
       };
@@ -152,6 +157,7 @@
         l = document.createElement("div");
         l.id = `details-box-${x.a_ticker}`;
         l.classList.add("details-box");
+        window.currentItem = x.a_ticker;
         // l.id = `details-box`;
 
         xbt = document.createElement("button");
@@ -263,6 +269,24 @@
             printMe(e);
           });
       };
+
+  window.addToBanner = window.addToBanner
+    ? null
+    : (banner, x1) => {
+        console.log(x1);
+        bpod = createDiv("banner-pod");
+        bpodName = createDiv("banner-name");
+        bpodName.innerText = x1.name;
+        bPodGain = createDiv("banner-gain");
+        bPodGain.innerText = x1.gain;
+        [bpodName, bPodGain].forEach((x) => bpod.appendChild(x));
+        banner.appendChild(bpod);
+      };
+
+  // banner
+  banner = createDiv("banner");
+  banner.classList.add("banner");
+  document.body.appendChild(banner);
 
   ccc = document.getElementById("container");
   ul = document.createElement("div");

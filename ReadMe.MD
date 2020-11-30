@@ -25,4 +25,5 @@ docker build -t redcar .
 
 ```
 systemctl start pinkpanther
+systemctl enable pinkpanther
 ```

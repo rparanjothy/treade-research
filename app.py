@@ -7,70 +7,60 @@ import yfinance
 from flask import Flask, jsonify, render_template, url_for
 from flask_cors import CORS
 import numpy as np
-import concurrent.futures
+# import concurrent.futures
 import time
 import requests
 import urllib.parse
+import json
 
 app = Flask(__name__)
 CORS(app)
 
 
-def getPrice(x):
-    time.sleep(2)
-    o = {}
-    print("received", x)
-    res = requests.get(urllib.parse.urljoin(
-        "http://localhost:5000", url_for("data", ticker=x)))
-    j = res.json()
-    o['ticker'] = x
-    o['gain'] = j['a_range']['median']
-    return o
+# def getPrice(x):
+#     time.sleep(2)
+#     o = {}
+#     print("received", x)
+#     res = requests.get(urllib.parse.urljoin(
+#         "http://localhost:5000", url_for("data", ticker=x)))
+#     j = res.json()
+#     o['ticker'] = x
+#     o['gain'] = j['a_range']['median']
+#     print(o)
+#     return o
+def optiGains(p, cap):
+    px, capx = tuple(map(float, (p, cap)))
+    tolerance = .0175
+    lps = .04
+    risk = float(capx)*tolerance
+    qty = int(risk/(float(px)*lps))
+    return qty
 
 
-@app.route("/findMore", methods=["GET"])
-def findmore():
-    xout = []
-
-    def whenDone(x):
-        print("in Callback ", x.result())
-        xout.append(x.result())
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as workerPool:
-        for x in range(10):
-            workerPool.submit(getPrice, x).add_done_callback(whenDone)
-
-    return jsonify({"here": xout})
-
-
-def runAfter(x, ticker):
-    time.sleep(x % 10)
-    return getPrice(ticker)
-
-
-@app.route("/findMoreParallel", methods=["GET"])
-def findMoreParallel():
-    xout = []
-
-    def whenDone(x):
-        # print("in Callback ", x.result())
-        try:
-            xout.append(x.result())
-        except Exception as e:
-            print("Error", e)
-
+@app.route("/api/v1/projectedGains/<cap>", methods=["GET"])
+def showGains(cap):
     res = requests.get(urllib.parse.urljoin(
         "http://localhost:5000", url_for("list")))
     j = res.json()
     lticks = j['data']
-    lticks = lticks[:10]
+    i = yfinance.download(tickers=lticks, period="20d", interval="1d")
+    gains = (i['High']-i['Low'])
+    price = i['Close']
+    for i in gains.columns:
+        gains[f"{i}-QTY"] = optiGains(price[f"{i}"][-1], float(cap))
+        gains[f"{i}-MED"] = gains[f"{i}"].median()
+        gains[f"{i}-GAIN"] = gains[f"{i}-QTY"]*gains[f"{i}-MED"]
+    xo = gains.last("1d")
+    xx = pd.DataFrame()
+    for c in [xc for xc in xo.columns if xc in lticks]:
+        xx[f"{c}"] = round(xo[f"{c}-QTY"]*xo[f"{c}-MED"], 4)
+    jsonString = xx.to_json(orient="records")
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers=8) as workerPool:
-
-        for idx, ticker in enumerate(lticks):
-            workerPool.submit(runAfter, idx, ticker
-                              ).add_done_callback(whenDone)
-    return jsonify({"data": xout})
+    xout = json.loads(jsonString)
+    ccc = sorted([{"name": k, "gain": v} for k, v in xout[0].items()],
+                 key=lambda x: x['gain'], reverse=True)
+    # print(ccc)
+    return jsonify({"gains": ccc})
 
 
 @app.route("/health", methods=["GET"])
@@ -137,7 +127,6 @@ def lister():
         "SRVR",
         "SQ",
         "SPY",
-        "SPX",
         "SOLO",
         "SLV",
         "SILV",

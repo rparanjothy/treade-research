@@ -1,0 +1,288 @@
+{
+"data": [
+{
+"gain": 76.1051,
+"ticker": "AMZN"
+},
+{
+"gain": 57.49,
+"ticker": "BKNG"
+},
+{
+"gain": 30.75,
+"ticker": "CMG"
+},
+{
+"gain": 26.1201,
+"ticker": "AZO"
+},
+{
+"gain": 13.1,
+"ticker": "BLK"
+},
+{
+"gain": 11.975,
+"ticker": "ADBE"
+},
+{
+"gain": 11.735,
+"ticker": "LRCX"
+},
+{
+"gain": 10.725,
+"ticker": "MSCI"
+},
+{
+"gain": 8.675,
+"ticker": "DOCU"
+},
+{
+"gain": 8.125,
+"ticker": "BA"
+},
+{
+"gain": 7,
+"ticker": "LMT"
+},
+{
+"gain": 6.48,
+"ticker": "FB"
+},
+{
+"gain": 5.865,
+"ticker": "KLAC"
+},
+{
+"gain": 5.625,
+"ticker": "COST"
+},
+{
+"gain": 5.42,
+"ticker": "CLX"
+},
+{
+"gain": 4.9845,
+"ticker": "MRNA"
+},
+{
+"gain": 4.905,
+"ticker": "HD"
+},
+{
+"gain": 4.445,
+"ticker": "MSFT"
+},
+{
+"gain": 3.815,
+"ticker": "FIZZ"
+},
+{
+"gain": 3.575,
+"ticker": "CAT"
+},
+{
+"gain": 3.525,
+"ticker": "MCHP"
+},
+{
+"gain": 3.44,
+"ticker": "DIS"
+},
+{
+"gain": 3.145,
+"ticker": "APPS"
+},
+{
+"gain": 3.035,
+"ticker": "MMM"
+},
+{
+"gain": 2.875,
+"ticker": "GD"
+},
+{
+"gain": 2.8,
+"ticker": "AAPL"
+},
+{
+"gain": 2.695,
+"ticker": "CVX"
+},
+{
+"gain": 2.655,
+"ticker": "JPM"
+},
+{
+"gain": 2.64,
+"ticker": "AMD"
+},
+{
+"gain": 2.62,
+"ticker": "KMB"
+},
+{
+"gain": 2.53,
+"ticker": "LSI"
+},
+{
+"gain": 2.32,
+"ticker": "ABT"
+},
+{
+"gain": 2.245,
+"ticker": "IBB"
+},
+{
+"gain": 2.17,
+"ticker": "JNJ"
+},
+{
+"gain": 2.155,
+"ticker": "BIG"
+},
+{
+"gain": 2.07,
+"ticker": "CRUS"
+},
+{
+"gain": 1.835,
+"ticker": "D"
+},
+{
+"gain": 1.815,
+"ticker": "ED"
+},
+{
+"gain": 1.69,
+"ticker": "GP"
+},
+{
+"gain": 1.665,
+"ticker": "LUV"
+},
+{
+"gain": 1.62,
+"ticker": "MRK"
+},
+{
+"gain": 1.61,
+"ticker": "LL"
+},
+{
+"gain": 1.475,
+"ticker": "KSS"
+},
+{
+"gain": 1.425,
+"ticker": "MU"
+},
+{
+"gain": 1.395,
+"ticker": "BLNK"
+},
+{
+"gain": 1.39,
+"ticker": "ENR"
+},
+{
+"gain": 1.375,
+"ticker": "KNDI"
+},
+{
+"gain": 1.265,
+"ticker": "K"
+},
+{
+"gain": 1.21,
+"ticker": "HOG"
+},
+{
+"gain": 1.2,
+"ticker": "CMCSA"
+},
+{
+"gain": 0.96,
+"ticker": "CCL"
+},
+{
+"gain": 0.92,
+"ticker": "BUD"
+},
+{
+"gain": 0.865,
+"ticker": "MO"
+},
+{
+"gain": 0.81,
+"ticker": "KO"
+},
+{
+"gain": 0.79,
+"ticker": "CSCO"
+},
+{
+"gain": 0.745,
+"ticker": "GNMK"
+},
+{
+"gain": 0.7425,
+"ticker": "KHC"
+},
+{
+"gain": 0.72,
+"ticker": "KR"
+},
+{
+"gain": 0.685,
+"ticker": "IRM"
+},
+{
+"gain": 0.6245,
+"ticker": "JO"
+},
+{
+"gain": 0.565,
+"ticker": "AAL"
+},
+{
+"gain": 0.56,
+"ticker": "HPQ"
+},
+{
+"gain": 0.5,
+"ticker": "M"
+},
+{
+"gain": 0.43,
+"ticker": "AXDX"
+},
+{
+"gain": 0.43,
+"ticker": "AYRO"
+},
+{
+"gain": 0.37,
+"ticker": "CLDR"
+},
+{
+"gain": 0.325,
+"ticker": "MRO"
+},
+{
+"gain": 0.275,
+"ticker": "AMC"
+},
+{
+"gain": 0.245,
+"ticker": "F"
+},
+{
+"gain": 0.17,
+"ticker": "DPW"
+},
+{
+"gain": 0.115,
+"ticker": "IDEX"
+}
+]
+}

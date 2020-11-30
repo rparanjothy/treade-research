@@ -4,13 +4,73 @@ import pandas as pd
 import pandas_datareader as r
 from datetime import datetime, timedelta
 import yfinance
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, url_for
 from flask_cors import CORS
 import numpy as np
-
+import concurrent.futures
+import time
+import requests
+import urllib.parse
 
 app = Flask(__name__)
 CORS(app)
+
+
+def getPrice(x):
+    time.sleep(2)
+    o = {}
+    print("received", x)
+    res = requests.get(urllib.parse.urljoin(
+        "http://localhost:5000", url_for("data", ticker=x)))
+    j = res.json()
+    o['ticker'] = x
+    o['gain'] = j['a_range']['median']
+    return o
+
+
+@app.route("/findMore", methods=["GET"])
+def findmore():
+    xout = []
+
+    def whenDone(x):
+        print("in Callback ", x.result())
+        xout.append(x.result())
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as workerPool:
+        for x in range(10):
+            workerPool.submit(getPrice, x).add_done_callback(whenDone)
+
+    return jsonify({"here": xout})
+
+
+def runAfter(x, ticker):
+    time.sleep(x % 10)
+    return getPrice(ticker)
+
+
+@app.route("/findMoreParallel", methods=["GET"])
+def findMoreParallel():
+    xout = []
+
+    def whenDone(x):
+        # print("in Callback ", x.result())
+        try:
+            xout.append(x.result())
+        except Exception as e:
+            print("Error", e)
+
+    res = requests.get(urllib.parse.urljoin(
+        "http://localhost:5000", url_for("list")))
+    j = res.json()
+    lticks = j['data']
+    lticks = lticks[:10]
+
+    with concurrent.futures.ProcessPoolExecutor(max_workers=8) as workerPool:
+
+        for idx, ticker in enumerate(lticks):
+            workerPool.submit(runAfter, idx, ticker
+                              ).add_done_callback(whenDone)
+    return jsonify({"data": xout})
 
 
 @app.route("/health", methods=["GET"])
@@ -47,7 +107,7 @@ def getStats(i, x):
     return xStats
 
 
-@app.route("/api/v1/list", methods=["GET"])
+@app.route("/api/v1/list", methods=["GET"], endpoint="list")
 def lister():
     x = [
         "ZM",
@@ -185,7 +245,7 @@ def lister():
 
 
 @app.route("/api/v1/data/<ticker>/<freq>", methods=["GET"])
-@app.route("/api/v1/data/<ticker>", methods=["GET"])
+@app.route("/api/v1/data/<ticker>", methods=["GET"], endpoint="data")
 def getInsights(ticker, freq="20d"):
     i = yfinance.download(tickers=ticker.upper(), period=freq, interval="1d")
     # TODO: Improve this.. its not fast enuf
@@ -230,7 +290,7 @@ def getInsights(ticker, freq="20d"):
     return jsonify(out)
 
 
-@app.route("/api/v1/opti/<p>/<cap>", methods=['GET'])
+@app.route("/api/v1/opti/<p>/<cap>", methods=['GET'], endpoint="opti")
 def opti(p, cap):
     px, capx = tuple(map(float, (p, cap)))
     tolerance = .0175

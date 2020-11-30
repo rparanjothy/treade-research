@@ -1,0 +1,15 @@
+
+[Unit]
+Description=PinkPanther
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+ExecStart=python3 /home/pi/pinkpanther/treade-research/app.py 
+
+[Install]
+WantedBy=multi-user.target

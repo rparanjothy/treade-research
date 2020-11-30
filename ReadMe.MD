@@ -20,3 +20,9 @@
 ```
 docker build -t redcar .
 ```
+
+## Systemd
+
+```
+systemctl start pinkpanther
+```

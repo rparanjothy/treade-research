@@ -37,6 +37,12 @@ def optiGains(p, cap):
     return qty
 
 
+def xoo(n, l, v):
+    # print(n)
+    list(filter(lambda x: x['name'] == n.split(
+        "-")[0], l))[0].update({"dx": v})
+
+
 @app.route("/api/v1/projectedGains/<cap>", methods=["GET"])
 def showGains(cap):
     res = requests.get(urllib.parse.urljoin(
@@ -45,20 +51,32 @@ def showGains(cap):
     lticks = j['data']
     i = yfinance.download(tickers=lticks, period="20d", interval="1d")
     gains = (i['High']-i['Low'])
+    delta = i['Close']-i['Close'].shift(1)
     price = i['Close']
     for i in gains.columns:
         gains[f"{i}-QTY"] = optiGains(price[f"{i}"][-1], float(cap))
         gains[f"{i}-MED"] = gains[f"{i}"].median()
         gains[f"{i}-GAIN"] = gains[f"{i}-QTY"]*gains[f"{i}-MED"]
+        gains[f"{i}-DX"] = round(delta[f"{i}"], 3)
     xo = gains.last("1d")
     xx = pd.DataFrame()
     for c in [xc for xc in xo.columns if xc in lticks]:
         xx[f"{c}"] = round(xo[f"{c}-QTY"]*xo[f"{c}-MED"], 4)
     jsonString = xx.to_json(orient="records")
-
     xout = json.loads(jsonString)
-    ccc = sorted([{"name": k, "gain": v} for k, v in xout[0].items()],
+
+    # add direction This is brainbending
+    dx = gains.last("1d")[[x for x in gains.columns if x.endswith("-DX")]]
+    dxl = json.loads(dx.to_json(orient="records"))
+    dxj = dxl[0]
+    print(dxj)
+    print(xout)
+    xoutx = [{"name": k, "gain": v} for k, v in xout[0].items()]
+    [xoo(k, xoutx, v) for k, v in dxj.items()]
+
+    ccc = sorted(xoutx,
                  key=lambda x: x['gain'], reverse=True)
+
     # print(ccc)
     return jsonify({"gains": ccc})
 
@@ -294,4 +312,4 @@ def opti(p, cap):
 
 
 if __name__ == "__main__":
-    app.run("0.0.0.0", 5000)
+    app.run("0.0.0.0", 5000, True)

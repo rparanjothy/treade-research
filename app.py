@@ -79,6 +79,53 @@ def showGains(cap):
     return jsonify({"gains": ccc})
 
 
+@app.route("/api/v1/watermark", methods=["GET"])
+def showWaterMark():
+    lticks = [
+        "ACY",
+        "AMRS",
+        "BEEM",
+        "BNGO",
+        "BTBT",
+        "FBIO",
+        "FRSX",
+        "GEVO",
+        "INSG",
+        "LI",
+        "NNDM",
+        "NXTD",
+        "PLG",
+        "CTB",
+        "RHE",
+        "RIG",
+        "SBE",
+        "SEAC",
+        "SGBX",
+        "SNCR",
+        "TMDI",
+        "VGAC",
+        "VSTM"
+    ]
+
+    i = yfinance.download(tickers=lticks, period="20d", interval="1d")
+    f = pd.DataFrame()
+    pMin = (i['Close'].min(axis=0))
+    pMax = (i['Close'].max(axis=0))
+    price = i['Close'].last("1d").min()
+
+    f['min'] = round(pMin, 2)
+    f['max'] = round(pMax, 2)
+    f['price'] = round(price, 2)
+
+    f['strength'] = round((f['price']-f['min'])/(f['max']-f['min']), 3)
+    f['a_s'] = round((f['price']-f['min'])/f['min'], 3)
+    f['a_r'] = round((f['max']-f['price'])/f['price'], 3)
+    f['name'] = f.index
+    jsonString = f.to_json(orient="records", index=True)
+    xout = json.loads(jsonString)
+    return jsonify({"data": xout})
+
+
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({"msg": "PraiseGod"})
@@ -87,6 +134,11 @@ def health():
 @app.route("/gain", methods=["GET"])
 def gain():
     return render_template("gain.html")
+
+
+@app.route("/gainX", methods=["GET"])
+def gainX():
+    return render_template("gainX.html")
 
 
 @app.route("/app", methods=["GET"])
@@ -121,6 +173,7 @@ def getStats(i, x):
 @app.route("/api/v1/list", methods=["GET"], endpoint="list")
 def lister():
     x = [
+        "CTB",
         "MRNA",
         "COCP",
         "APPS",
@@ -264,6 +317,7 @@ def lister():
 
     ]
     return jsonify({"data": sorted(x)})
+    # return jsonify({"data": sorted(x[:14])})
 
 
 @app.route("/api/v1/data/<ticker>/<freq>", methods=["GET"])
@@ -309,6 +363,38 @@ def getInsights(ticker, freq="20d"):
     out['a_x'] = growthStats
     out["a"] = "RED" if growthStats["median"] < .99 else "GREEN"
     out["a_curr_dirn"] = "DOWN" if growthStats["current"] < 1 else "UP"
+    return jsonify(out)
+
+
+@app.route("/api/v1/wm/<ticker>", methods=["GET"], endpoint="wm")
+def getWaterMark(ticker, freq="20d"):
+    i = yfinance.download(tickers=ticker.upper(), period=freq, interval="1d")
+
+    # Strength Computation
+    pMin, pMax = tuple(
+        map(
+            lambda x: round(x, 4),
+            (i['Close'].min(
+            ), i['Close'].max())
+        )
+    )
+
+    currStrength = (i['Close'][-1]-pMin) / (pMax-pMin)
+
+    currStrength = round(currStrength, 3)
+    currPrice = round((i['Close'][-1]), 3)
+
+    del(i)
+
+    out = {}
+    out["a_strength"] = round(currStrength, 2)
+    out["a_ticker"] = ticker
+    out["a_pmin"] = pMin
+    out["a_pmax"] = pMax
+    out["a_price"] = currPrice
+    out["a_dirn"] = "UP" if currPrice-pMin > 0 else "DOWN"
+    out["a_s"] = round((currPrice-pMin)/pMin, 3)
+    out["a_r"] = round((pMax-currPrice)/currPrice, 3)
     return jsonify(out)
 
 

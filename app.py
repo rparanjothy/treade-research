@@ -82,14 +82,18 @@ def showGains(cap):
 @app.route("/api/v1/watermark", methods=["GET"])
 def showWaterMark():
     lticks = [
+        "AAPL",
         "ACY",
         "AMRS",
         "BEEM",
         "BNGO",
         "BTBT",
+        "BTU",
         "FBIO",
+        "FIII",
         "FRSX",
         "GEVO",
+        "IAG",
         "INSG",
         "LI",
         "NNDM",
@@ -102,6 +106,7 @@ def showWaterMark():
         "SEAC",
         "SGBX",
         "SNCR",
+        "TER",
         "TMDI",
         "VGAC",
         "VSTM"
@@ -118,7 +123,7 @@ def showWaterMark():
     f['price'] = round(price, 2)
 
     f['strength'] = round((f['price']-f['min'])/(f['max']-f['min']), 3)
-    f['a_s'] = round((f['price']-f['min'])/f['min'], 3)
+    f['a_s'] = round((f['min']-f['price'])/f['price'], 3)
     f['a_r'] = round((f['max']-f['price'])/f['price'], 3)
     f['name'] = f.index
     jsonString = f.to_json(orient="records", index=True)
@@ -363,7 +368,7 @@ def getWaterMark(ticker, freq="20d"):
     out["a_pmax"] = pMax
     out["a_price"] = currPrice
     out["a_dirn"] = "UP" if currPrice-pMin > 0 else "DOWN"
-    out["a_s"] = round((currPrice-pMin)/pMin, 3)
+    out["a_s"] = round((pMin-currPrice)/currPrice, 3)
     out["a_r"] = round((pMax-currPrice)/currPrice, 3)
     return jsonify(out)
 

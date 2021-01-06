@@ -89,16 +89,41 @@
         bPodGain = createDiv("banner-gain");
         bPodGain.innerText = `${x1.strength}`;
 
-        bPodMn = createDiv("banner-dx");
-        bPodMn.innerText = `$${x1.min} | $${x1.price} | $${x1.max} `;
+        bPodMn = createDiv("banner-Mn");
+        // bPodMn.innerText = `$${x1.min} | $${x1.price} | $${x1.max} `;
+        bPodMn.innerText = `$${x1.min}`;
         bPodMn.style.fontSize = "11px";
 
-        bPodR = createDiv("banner-dx");
-        bPodR.innerText = `R: ${x1.a_r} | S: ${x1.a_s}`;
+        bPodC = createDiv("banner-C");
+        bPodC.innerText = `$${x1.price}`;
+        bPodC.style.fontSize = "11px";
+
+        bPodMx = createDiv("banner-Mx");
+        bPodMx.innerText = `$${x1.max}`;
+        bPodMx.style.fontSize = "11px";
+
+        vbar = createDiv("v-bar");
+        [bPodMn, bPodC, bPodMx].forEach((x) => vbar.appendChild(x));
+
+        vbarSR = createDiv("v-bar-sr");
+        bPodR = createDiv("banner-R");
+        bPodR.innerText = `R: ${x1.a_r}`;
         bPodR.style.fontSize = "11px";
 
-        bpod.style.background = x1.a_s <= 0.03 ? r : g;
-        [bpodName, bPodGain, bPodMn, bPodR].forEach((x) => bpod.appendChild(x));
+        bPodS = createDiv("banner-S");
+        bPodS.innerText = `S: ${x1.a_s}`;
+        bPodS.style.fontSize = "11px";
+
+        [bPodMn, bPodC, bPodMx].forEach((x) => vbar.appendChild(x));
+        [bPodS, bPodR].forEach((x) => vbarSR.appendChild(x));
+
+        // bPodR = createDiv("banner-R");
+        // bPodR.innerText = `R: ${x1.a_r} | S: ${x1.a_s}`;
+        // bPodR.style.fontSize = "11px";
+
+        // bpod.style.background = x1.a_s <= -0.05 ? r : g;
+        // [bpodName, bPodGain, bPodMn, bPodR].forEach((x) => bpod.appendChild(x));
+        [bpodName, bPodGain, vbar, vbarSR].forEach((x) => bpod.appendChild(x));
         banner.appendChild(bpod);
       };
 

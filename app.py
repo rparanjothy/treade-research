@@ -110,6 +110,8 @@ def showWaterMark():
         "TMDI",
         "VGAC",
         "VSTM"
+
+
     ]
 
     i = yfinance.download(tickers=lticks, period="20d", interval="1d")

@@ -70,9 +70,11 @@
           .get(`/api/v1/watermark`)
           .then((e) => e.data.data)
           .then((x) => {
-            console.log(x);
+            // console.log(x);
             loading.classList.toggle("hide");
-            x.forEach((x1) => addToBanner(banner, x1));
+            x.sort((a, b) => (a.a_s < b.a_s ? 1 : -1)).forEach((x1) =>
+              addToBanner(banner, x1)
+            );
           })
           .catch((e) => console.error(e));
       };
@@ -80,7 +82,7 @@
   window.addToBanner = window.addToBanner
     ? null
     : (banner, x1) => {
-        console.log(x1);
+        // console.log(x1);
         const r = "#ff0000ba";
         const g = "#00ff00ba";
         bpod = createDiv("banner-pod");
@@ -90,7 +92,6 @@
         bPodGain.innerText = `${x1.strength}`;
 
         bPodMn = createDiv("banner-Mn");
-        // bPodMn.innerText = `$${x1.min} | $${x1.price} | $${x1.max} `;
         bPodMn.innerText = `$${x1.min}`;
         bPodMn.style.fontSize = "11px";
 
@@ -117,12 +118,6 @@
         [bPodMn, bPodC, bPodMx].forEach((x) => vbar.appendChild(x));
         [bPodS, bPodR].forEach((x) => vbarSR.appendChild(x));
 
-        // bPodR = createDiv("banner-R");
-        // bPodR.innerText = `R: ${x1.a_r} | S: ${x1.a_s}`;
-        // bPodR.style.fontSize = "11px";
-
-        // bpod.style.background = x1.a_s <= -0.05 ? r : g;
-        // [bpodName, bPodGain, bPodMn, bPodR].forEach((x) => bpod.appendChild(x));
         [bpodName, bPodGain, vbar, vbarSR].forEach((x) => bpod.appendChild(x));
         banner.appendChild(bpod);
       };

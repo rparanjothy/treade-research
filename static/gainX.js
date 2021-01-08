@@ -67,7 +67,7 @@
         document.body.appendChild(loading);
         document.getElementById("banner").innerHTML = "";
         axios
-          .get(`/api/v1/watermark`)
+          .get(`/api/v1/watermark/${wl}`)
           .then((e) => e.data.data)
           .then((e) =>
             e.map((x) => {
@@ -160,5 +160,16 @@
   banner3.classList.add("banner");
   document.body.appendChild(banner3);
 
+  wl = "pb";
+
   fetchMe();
+
+  toggler = createDiv("toggler");
+  toggler.addEventListener("click", () => {
+    wl = wl === "all" ? "pb" : "all";
+    console.log(wl);
+    fetchMe();
+  });
+
+  document.body.appendChild(toggler);
 })();

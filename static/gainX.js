@@ -85,19 +85,21 @@
           .then((x) => {
             console.log(x);
             loading.classList.toggle("hide");
-            x.sort((a, b) => (a.a_s < b.a_s ? 1 : -1)).forEach((x1) => {
-              switch (x1.box) {
-                case 1:
-                  addToBanner(banner1, x1);
-                  break;
-                case 2:
-                  addToBanner(banner2, x1);
-                  break;
-                case 3:
-                  addToBanner(banner3, x1);
-                  break;
+            x.sort((a, b) => (a.strength > b.strength ? 1 : -1)).forEach(
+              (x1) => {
+                switch (x1.box) {
+                  case 1:
+                    addToBanner(banner1, x1);
+                    break;
+                  case 2:
+                    addToBanner(banner2, x1);
+                    break;
+                  case 3:
+                    addToBanner(banner3, x1);
+                    break;
+                }
               }
-            });
+            );
           })
           .catch((e) => console.error(e));
       };

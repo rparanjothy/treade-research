@@ -69,12 +69,35 @@
         axios
           .get(`/api/v1/watermark`)
           .then((e) => e.data.data)
+          .then((e) =>
+            e.map((x) => {
+              const xs = parseFloat(x.strength);
+              if (xs <= 0.275) {
+                x.box = 1;
+              } else if (0.275 < xs && xs < 0.725) {
+                x.box = 2;
+              } else {
+                x.box = 3;
+              }
+              return x;
+            })
+          )
           .then((x) => {
-            // console.log(x);
+            console.log(x);
             loading.classList.toggle("hide");
-            x.sort((a, b) => (a.a_s < b.a_s ? 1 : -1)).forEach((x1) =>
-              addToBanner(banner, x1)
-            );
+            x.sort((a, b) => (a.a_s < b.a_s ? 1 : -1)).forEach((x1) => {
+              switch (x1.box) {
+                case 1:
+                  addToBanner(banner1, x1);
+                  break;
+                case 2:
+                  addToBanner(banner2, x1);
+                  break;
+                case 3:
+                  addToBanner(banner3, x1);
+                  break;
+              }
+            });
           })
           .catch((e) => console.error(e));
       };
@@ -122,10 +145,20 @@
         banner.appendChild(bpod);
       };
 
-  // banner
-  banner = createDiv("banner");
-  banner.classList.add("banner");
-  document.body.appendChild(banner);
+  // banner1
+  banner1 = createDiv("banner");
+  banner1.classList.add("banner");
+  document.body.appendChild(banner1);
+
+  // banner2
+  banner2 = createDiv("banner");
+  banner2.classList.add("banner");
+  document.body.appendChild(banner2);
+
+  // banner3
+  banner3 = createDiv("banner");
+  banner3.classList.add("banner");
+  document.body.appendChild(banner3);
 
   fetchMe();
 })();

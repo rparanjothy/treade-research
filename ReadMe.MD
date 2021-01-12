@@ -27,3 +27,12 @@ docker build -t redcar .
 systemctl start pinkpanther
 systemctl enable pinkpanther
 ```
+
+## Development
+
+```
+FLASK_APP=app
+FLASK_ENV=development
+export FLASK_DEBUG=true
+flask run
+```

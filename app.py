@@ -229,6 +229,7 @@ def showWaterMark(wl="all"):
         "RIOT",
         "NXTD",
         "LTBR",
+        "ALLT"
     ]
 
     lticks_chase = ["XPEV", "AAPL", "KO", "KSS", "XOM", "F", "NIO"]

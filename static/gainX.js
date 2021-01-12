@@ -59,7 +59,8 @@
   window.fetchMe = window.fetchMe
     ? null
     : (x1) => {
-        console.log("sddd");
+        [banner1, banner2, banner3].forEach((e) => (e.innerHTML = ""));
+
         loading = createDiv("loading");
         loading.innerText = "Loading";
         loading.classList.add("loading");
@@ -83,7 +84,7 @@
             })
           )
           .then((x) => {
-            console.log(x);
+            // console.log(x);
             loading.classList.toggle("hide");
             x.sort((a, b) => (a.strength > b.strength ? 1 : -1)).forEach(
               (x1) => {
@@ -102,6 +103,19 @@
             );
           })
           .catch((e) => console.error(e));
+      };
+
+  window.addToggler = window.addToggler
+    ? null
+    : (lbl) => {
+        toggler = createDiv("toggler");
+        toggler.innerText = lbl;
+
+        toggler.addEventListener("click", () => {
+          wl = lbl;
+          fetchMe();
+        });
+        return toggler;
       };
 
   window.addToBanner = window.addToBanner
@@ -167,11 +181,22 @@
   fetchMe();
 
   toggler = createDiv("toggler");
-  toggler.addEventListener("click", () => {
-    wl = wl === "all" ? "pb" : "all";
-    console.log(wl);
-    fetchMe();
-  });
+  toggler.innerText = "pb";
 
-  document.body.appendChild(toggler);
+  // toggler.addEventListener("click", () => {
+  //   wl = wl === "all" ? "pb" : "all";
+  //   // console.log(wl);
+  //   toggler.innerText = wl;
+  //   fetchMe();
+  // });
+
+  btnbar = createDiv("btnbar");
+
+  pb = addToggler("pb");
+  chase = addToggler("chase");
+  lt = addToggler("all");
+
+  document.body.appendChild(btnbar);
+
+  [pb, chase, lt].forEach((e) => btnbar.appendChild(e));
 })();

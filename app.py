@@ -231,7 +231,16 @@ def showWaterMark(wl="all"):
         "LTBR",
     ]
 
-    lticks = lticks_all if wl == "all" else lticks_pb
+    lticks_chase = ["XPEV", "AAPL", "KO", "KSS", "XOM", "F", "NIO"]
+
+    # lticks = lticks_all if wl == "all" else lticks_pb
+    lticks = lticks_all
+
+    if (wl == "chase"):
+        lticks = lticks_chase
+
+    if (wl == "pb"):
+        lticks = lticks_pb
 
     i = yfinance.download(tickers=lticks, period="20d", interval="1d")
     f = pd.DataFrame()

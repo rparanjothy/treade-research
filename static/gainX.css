@@ -125,7 +125,22 @@ body {
   padding: 5px;
 }
 
-#toggler {
+#btnbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 40px;
+  width: 100%;
+  /* background-color: #d8a5d4b0; */
+  border-radius: 4px;
+  margin: 15px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* #toggler {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -135,4 +150,22 @@ body {
   border-radius: 4px;
   margin: 15px;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+} */
+
+#toggler {
+  height: 40px;
+  width: 80px;
+  background-color: #b869b1b0;
+  border-radius: 4px;
+  margin: 1px 15px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  position: relative;
 }

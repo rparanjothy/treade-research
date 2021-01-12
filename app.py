@@ -305,6 +305,20 @@ def getStats(i, x):
     return xStats
 
 
+@app.route("/api/v1/pivots/<ticker>")
+def s(ticker):
+    i = yfinance.download(tickers=ticker.upper(), period="20d", interval="1d")
+
+    # d = [10, 9, 8, 7, 7.6, 7.9, 6, 5, 5.5, 6, 4.9, 6.2, 7, 8, 10, 12]
+    d = i['Close'].round(3)
+    x = [(i, j, -i+j) for i, j in zip(d, d[1:])]
+    # [(i,j) for i,j in filter(lambda s: s[1][2]>0 and  s[0][2]<0,zip(x,x[1:]))]
+    pivots = [j[0] for i, j in filter(
+        lambda s: s[1][2] > 0 and s[0][2] < 0, zip(x, x[1:]))]
+
+    return jsonify({"pivots": pivots[::-1]})
+
+
 @app.route("/api/v1/list", methods=["GET"], endpoint="list")
 def lister():
     x = [

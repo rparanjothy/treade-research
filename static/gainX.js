@@ -125,8 +125,10 @@
         const r = "#ff0000ba";
         const g = "#00ff00ba";
         bpod = createDiv("banner-pod");
+
         bpodName = createDiv("banner-name");
         bpodName.innerText = x1.name;
+
         bPodGain = createDiv("banner-gain");
         bPodGain.innerText = `${x1.strength}`;
 
@@ -143,6 +145,14 @@
         bPodMx.style.fontSize = "11px";
 
         vbar = createDiv("v-bar");
+        vbar.addEventListener("click", (e) => {
+          setTimeout(() => {
+            document.body.style.backgroundImage = `url(https://charts2.finviz.com/chart.ashx?s=m&t=${x1.name})`;
+            document.body.style.backgroundRepeat = "no-repeat";
+            document.body.style.backgroundPosition = "right 20px bottom 20px";
+            document.body.style.backgroundBlendMode = "hard-light";
+          }, 100);
+        });
         [bPodMn, bPodC, bPodMx].forEach((x) => vbar.appendChild(x));
 
         vbarSR = createDiv("v-bar-sr");
@@ -199,4 +209,7 @@
   document.body.appendChild(btnbar);
 
   [pb, chase, lt].forEach((e) => btnbar.appendChild(e));
+  // plt = document.createElement("img");
+  // plt.id = "plot";
+  // document.body.appendChild(plt);
 })();
